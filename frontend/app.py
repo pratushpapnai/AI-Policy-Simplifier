@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import re
 
-URL="https://pratushpapnai-ai-policy-simplifier.hf.space/summarize"
+URL = "http://localhost:8000/summarize"
 
 st.set_page_config(
     page_title="Policy Simplifier AI",
