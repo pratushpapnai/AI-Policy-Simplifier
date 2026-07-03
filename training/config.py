@@ -1,0 +1,26 @@
+
+MODEL_NAME = "facebook/bart-large-cnn"
+
+
+LEARNING_RATE = 2e-5
+
+TRAIN_BATCH_SIZE = 1
+EVAL_BATCH_SIZE = 1
+
+GRADIENT_ACCUMULATION_STEPS = 4
+
+NUM_EPOCHS = 1
+
+WEIGHT_DECAY = 0.01
+
+WARMUP_RATIO = 0.1
+
+NO_REPEAT_NGRAM_SIZE = 3
+LENGTH_PENALTY = 1.0
+
+
+SEED = 42
+
+OUTPUT_DIR = "models/bart_large_cnn"
+
+LOGGING_DIR = "logs"
