@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 
 COPY . .
-RUN cnmod +x start.sh
+RUN chmod +x start.sh
 EXPOSE 7860
 
 CMD ["./start.sh"]  
