@@ -3,7 +3,13 @@ import importlib.util
 from pathlib import Path
 import requests
 import streamlit as st
-from app import config
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+CONFIG_PATH = PROJECT_ROOT / "app" / "config.py"
+config_spec = importlib.util.spec_from_file_location("policy_simplifier_config", CONFIG_PATH)
+config = importlib.util.module_from_spec(config_spec)
+config_spec.loader.exec_module(config)
 
 RISK_MAP = config.RISK_MAP
 URL = "http://localhost:8000/summarize"
