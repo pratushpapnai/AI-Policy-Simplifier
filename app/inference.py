@@ -30,6 +30,8 @@ class PolicySummarizer:
             trust_remote_code=True
         ).to(self.device)
         
+        print(self.model.device)
+        
         self.model.eval();
         
     def summarize(self,user_template):
