@@ -30,7 +30,7 @@ class PolicySummarizer:
         
         print(self.model.device)
         
-        self.model.eval();
+        self.model.eval()
         
     def summarize(self,user_template):
         print("Summarizing............")
@@ -44,7 +44,7 @@ class PolicySummarizer:
         
         outputs = self.model.generate(
             **inputs,
-            max_new_tokens=SUMMARY_MAX_NEW_TOKENS,
+            max_new_tokens=300,
             do_sample=False,
             no_repeat_ngram_size=3,
             eos_token_id=self.tokenizer.eos_token_id,
@@ -103,7 +103,7 @@ class PolicySummarizer:
         
         outputs = self.model.generate(
             **inputs,
-            max_new_tokens=RISK_MAX_NEW_TOKENS,
+            max_new_tokens=300,
             do_sample=False,
             no_repeat_ngram_size=3,
             eos_token_id=self.tokenizer.eos_token_id,
