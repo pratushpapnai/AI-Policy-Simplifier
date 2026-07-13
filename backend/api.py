@@ -51,14 +51,12 @@ def parse_list(sample):
 
 def parse_risk_json(raw_output: str):
     try:
-        parsed=json.loads(raw_output)
-        return {k:parsed.get(k,[]) for k in VALID_KINDS}
+        return json.loads(raw_output)
     except:
         pass
     
     try:
-        parsed=ast.literal_eval(raw_output)
-        return {k:parsed.get(k,[]) for k in VALID_KINDS}
+        return ast.literal_eval(raw_output)
     except:
         pass
     
@@ -79,27 +77,22 @@ def parse_risk_json(raw_output: str):
         result[cat]=parse_list(cat_list)
         
     return result
-        
-    
-    
+         
 
 def merge_risks(risk_outputs):
-    merged={k:set() for k in VALID_KINDS}
-    
+    merged = {k: set() for k in VALID_KINDS}
+
     for raw_output in risk_outputs:
-        
-        parsed=parse_risk_json(raw_output)
-            
-        for category,evidence_list in parsed.items():
+        parsed = parse_risk_json(raw_output)
+
+        for category, evidence_list in parsed.items():
             if category not in merged:
                 continue
-                
+
             for evidence in evidence_list:
                 merged[category].add(evidence)
-                
-    merged={k:list(v) for k,v in merged.items()}
-                    
-    return merged
+
+    return {k: list(v) for k, v in merged.items()}
 
 @app.get("/")
 def health_check():

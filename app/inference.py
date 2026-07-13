@@ -21,10 +21,11 @@ class PolicySummarizer:
     def  __init__(self):
         self.device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.tokenizer=AutoTokenizer.from_pretrained(MODEL_PATH,trust_remote_code=True)
-            
+        
+        print(self.tokenizer.pad_token_id)
         self.model=AutoModelForCausalLM.from_pretrained(
             MODEL_PATH,
-            torch_dtype=torch.float16,
+            dtype=torch.float16,
             trust_remote_code=True
         ).to(self.device)
         
