@@ -20,9 +20,7 @@ class PolicySummarizer:
 
     def  __init__(self):
         self.device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.tokenizer=AutoTokenizer.from_pretrained(TOKENIZER_PATH,trust_remote_code=True)
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token=self.tokenizer.eos_token
+        self.tokenizer=AutoTokenizer.from_pretrained(MODEL_PATH,trust_remote_code=True)
             
         self.model=AutoModelForCausalLM.from_pretrained(
             MODEL_PATH,
