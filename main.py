@@ -1,12 +1,10 @@
-from transformers import pipeline
+from app.config import *
 from app.inference import PolicySummarizer
 
-summarizer = PolicySummarizer()
+summarizer=PolicySummarizer()
 
-text='''
-When you purchase a subscription, we collect your billing address, payment details, and transaction history. Payment card information is processed securely by third-party payment providers and is not stored on our servers. Transaction records may be retained for up to seven years to comply with tax and financial regulations. We use purchase history to recommend subscription plans and improve customer support.
-'''
+text="When you purchase a subscription, we collect your billing address, payment details, and transaction history."
 
-
-print("\nSummary\n")
-print(summarizer.summarize(text))
+summary,risks=summarizer.generate_output(text)
+print(summary)
+print(risks)

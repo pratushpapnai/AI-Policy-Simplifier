@@ -2,6 +2,10 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 from app.inference import PolicySummarizer
+from app.config import *
+import json
+import re
+import ast
 
 
 app_instances = {}
@@ -27,6 +31,76 @@ app = FastAPI(
 class UserInput(BaseModel):
     text: str
 
+def parse_list(sample):
+    sample=sample.strip()
+    sample=sample.strip("[]")
+    
+    if sample.strip()=="":
+        return []
+        
+    items=[]
+    for item in sample.split(","):
+        item=item.strip()
+        item=item.strip('"')
+        item=item.strip("'")
+        
+        if item:
+            items.append(item)
+            
+    return items
+
+def parse_risk_json(raw_output: str):
+    try:
+        parsed=json.loads(raw_output)
+        return {k:parsed.get(k,[]) for k in VALID_KINDS}
+    except:
+        pass
+    
+    try:
+        parsed=ast.literal_eval(raw_output)
+        return {k:parsed.get(k,[]) for k in VALID_KINDS}
+    except:
+        pass
+    
+    result={k:[] for k in VALID_KINDS}
+    
+    raw_output=raw_output.strip()
+    raw_output=raw_output.strip("{}")
+    
+    pattern=r'["\']?(\w+)["\']?\s*:\s*\[(.*?)\]'
+    matches=re.findall(pattern,raw_output,flags=re.DOTALL)
+    
+    for cat,cat_list in matches:
+        cat=cat.strip().strip('"').strip("'")
+        
+        if cat not in result:
+            continue
+        
+        result[cat]=parse_list(cat_list)
+        
+    return result
+        
+    
+    
+
+def merge_risks(risk_outputs):
+    merged={k:set() for k in VALID_KINDS}
+    
+    for raw_output in risk_outputs:
+        
+        parsed=parse_risk_json(raw_output)
+            
+        for category,evidence_list in parsed.items():
+            if category not in merged:
+                continue
+                
+            for evidence in evidence_list:
+                merged[category].add(evidence)
+                
+    merged={k:list(v) for k,v in merged.items()}
+                    
+    return merged
+
 @app.get("/")
 def health_check():
     return {"status": "healthy", "model_loaded": "summarizer" in app_instances}
@@ -41,10 +115,13 @@ async def summarize(request: UserInput):
 
     try:
         summarizer = app_instances["summarizer"]
-        summary = summarizer.summarize(request.text)
+        summaries,risk_statements = summarizer.generate_output(request.text)
+        
+        risks=merge_risks(risk_statements)
 
         return {
-            "summary": summary
+            "summaries": summaries,
+            "risk_statements":risks,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Inference engine error: {str(e)}")

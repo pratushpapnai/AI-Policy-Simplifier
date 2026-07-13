@@ -2,3 +2,4 @@ __pycache__
 .env
 models/
 data/
+03_training_BART.ipynb
