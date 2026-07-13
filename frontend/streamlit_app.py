@@ -1,9 +1,9 @@
 import re
+import importlib.util
 from pathlib import Path
-from app import config
 import requests
 import streamlit as st
-
+from app import config
 
 RISK_MAP = config.RISK_MAP
 URL = "http://localhost:8000/summarize"
@@ -270,7 +270,7 @@ with left_col:
         height=290,
         placeholder="Example: We collect your billing address, payment details, transaction history...",
     )
-    generate = st.button("Analyze Policy", width="stretch")
+    generate = st.button("Analyze Policy", use_container_width=True)
 
 with right_col:
     st.markdown('<div class="section-heading">What this app returns</div>', unsafe_allow_html=True)
