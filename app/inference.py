@@ -25,7 +25,7 @@ class PolicySummarizer:
         print(self.tokenizer.pad_token_id)
         self.model=AutoModelForCausalLM.from_pretrained(
             MODEL_PATH,
-            dtype=torch.float16,
+            torch_dtype=torch.float16,
             trust_remote_code=True
         ).to(self.device)
         
