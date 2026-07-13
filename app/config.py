@@ -2,10 +2,10 @@ from pathlib import Path
 
 BASE_DIR=Path(__file__).parent.parent
 # print(BASE_DIR)
-MODEL_PATH="pratushpapnai/policy_assistant"
+MODEL_PATH="models/policy_assistant_v2/merged_model"
 DEVICE="cuda"
 
-MAX_INPUT_TOKENS=300
+MAX_INPUT_TOKENS=350
 OVERLAP=50
 
 VALID_KINDS = [
