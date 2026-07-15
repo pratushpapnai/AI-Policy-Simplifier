@@ -1,8 +1,8 @@
 ---
 title: Policy Simplifier AI
 emoji: 🛡️
-colorFrom: orange
-colorTo: red
+colorFrom: blue
+colorTo: indigo
 sdk: docker
 pinned: false
 ---
